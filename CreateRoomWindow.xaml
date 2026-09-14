@@ -1,0 +1,31 @@
+<Window x:Class="Area850.CreateRoomWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="New room"
+        Icon="pack://application:,,,/Assets/850.ico"
+        Width="380" Height="520"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Bg}"
+        FontFamily="{StaticResource Ui}">
+  <DockPanel Margin="18">
+    <Button DockPanel.Dock="Bottom" Content="Open the room" Click="Go_Click"
+            Background="{DynamicResource Accent}" Foreground="White" FontWeight="SemiBold" Padding="10"/>
+    <ScrollViewer>
+      <StackPanel>
+        <TextBlock Text="You're the owner. You can mint mods, lock the door, set a password."
+                   TextWrapping="Wrap" Foreground="{DynamicResource Sub}" Margin="0,0,0,14"/>
+        <TextBlock Text="ROOM NAME" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <TextBox x:Name="NameBox" Margin="0,4,0,10"/>
+        <TextBlock Text="CHANNEL" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <ComboBox x:Name="ChanBox" Margin="0,4,0,10" Height="28"/>
+        <TextBlock Text="TOPIC" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <TextBox x:Name="TopicBox" Margin="0,4,0,10"/>
+        <TextBlock Text="WELCOME / STATUS" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <TextBox x:Name="WelcomeBox" Margin="0,4,0,10" Height="64" TextWrapping="Wrap" AcceptsReturn="True"/>
+        <TextBlock Text="PASSWORD (optional)" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <PasswordBox x:Name="PassBox" Margin="0,4,0,0"/>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

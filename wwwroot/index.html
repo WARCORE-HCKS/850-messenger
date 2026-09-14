@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>850 Messenger</title>
+  <link rel="stylesheet" href="net.css"/>
+</head>
+<body>
+  <div id="splash" class="splash">
+    <div class="login">
+      <div class="login-banner">850 Messenger</div>
+      <div class="login-body">
+        <div class="login-logo">
+          <div class="flower">850</div>
+          <div>
+            <b>Sign in</b>
+            <div class="hint">Pick a nickname. No account. Just the net.</div>
+          </div>
+        </div>
+        <label>Display name<br/><input id="callsign" maxlength="18" placeholder="e.g. Nightwatch"/></label>
+        <label>Sign into a room<br/><select id="net-pick"></select></label>
+        <label class="row"><input type="checkbox" id="want-cam" checked/> Start my webcam</label>
+        <label class="row"><input type="checkbox" id="want-mic" checked/> Start my microphone (open mic)</label>
+        <button id="join-btn" class="xp">Sign In</button>
+        <p class="legal">WARCORE · area850.com · full duplex audio · not your parents' PTT</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="app" class="app hidden">
+    <div class="menubar">
+      <span>File</span><span>Contacts</span><span>Actions</span><span>Tools</span><span>Help</span>
+    </div>
+    <div class="iam">
+      <label>My status
+        <select id="status">
+          <option>Online</option>
+          <option>Busy</option>
+          <option>Be Right Back</option>
+          <option>Away</option>
+          <option>On The Phone</option>
+        </select>
+      </label>
+      <input id="psm" placeholder="Type a personal message and press Enter"/>
+    </div>
+    <div class="cols">
+      <aside class="contacts">
+        <div class="pane-h">Rooms</div>
+        <ul id="nets"></ul>
+        <div class="pane-h">On this room</div>
+        <ul id="roster"></ul>
+      </aside>
+      <main class="conv">
+        <div class="conv-h">
+          <span>To: <b id="net-name">Lobby</b></span>
+          <span id="you-line"></span>
+        </div>
+        <div class="conv-body">
+          <div id="log" class="log"></div>
+          <aside class="pics">
+            <div id="cams"></div>
+          </aside>
+        </div>
+        <div class="toolbar">
+          <button id="mic-btn" class="xp" title="Microphone">Mic</button>
+          <button id="cam-btn" class="xp" title="Webcam">Webcam</button>
+          <button id="nudge" class="xp" title="Nudge">Nudge</button>
+          <span class="grow"></span>
+          <span id="duplex" class="badge">Open mic · duplex</span>
+        </div>
+        <div class="compose">
+          <textarea id="msg" maxlength="500" placeholder="Type a message. /w Name hi  to whisper."></textarea>
+          <button id="send" class="xp send">Send</button>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="signalr.min.js"></script>
+  <script src="net.js"></script>
+</body>
+</html>

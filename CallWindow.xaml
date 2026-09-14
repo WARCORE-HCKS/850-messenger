@@ -1,0 +1,26 @@
+<Window x:Class="Area850.CallWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Call"
+        Icon="pack://application:,,,/Assets/850.ico"
+        Width="420" Height="520"
+        WindowStartupLocation="CenterScreen"
+        Background="#111418"
+        FontFamily="{StaticResource Ui}">
+  <DockPanel>
+    <Button DockPanel.Dock="Bottom" Content="End call" Click="Hang_Click"
+            Background="#E24B4A" Foreground="White" FontWeight="SemiBold"
+            Margin="24,12,24,20" Padding="12"/>
+    <Grid>
+      <Image x:Name="Remote" Stretch="UniformToFill"/>
+      <Border Width="120" Height="90" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+              Margin="12" BorderBrush="White" BorderThickness="2" CornerRadius="8" ClipToBounds="True">
+        <Image x:Name="Local" Stretch="UniformToFill"/>
+      </Border>
+      <StackPanel VerticalAlignment="Top" Margin="16">
+        <TextBlock x:Name="Who" Foreground="White" FontSize="18" FontWeight="SemiBold"/>
+        <TextBlock x:Name="State" Foreground="#AAB" FontSize="13"/>
+      </StackPanel>
+    </Grid>
+  </DockPanel>
+</Window>

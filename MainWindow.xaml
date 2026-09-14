@@ -1,0 +1,150 @@
+<Window x:Class="Area850.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="850 Messenger"
+        Icon="pack://application:,,,/Assets/850.ico"
+        Width="400" Height="660"
+        MinWidth="380" MinHeight="520"
+        MaxWidth="920"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Bg}"
+        FontFamily="{StaticResource Ui}">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition x:Name="ListCol" Width="400"/>
+      <ColumnDefinition x:Name="ChatCol" Width="0"/>
+    </Grid.ColumnDefinitions>
+
+    <!-- Contact / room list -->
+    <DockPanel Grid.Column="0" Background="{DynamicResource Card}">
+      <Border DockPanel.Dock="Top" Padding="16,14,12,10">
+        <DockPanel>
+          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+            <Button x:Name="StatsBtn" Width="36" Height="36" Click="Stats_Click" ToolTip="Admin stats" Visibility="Collapsed">
+              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE9D9;" FontSize="16" Foreground="{DynamicResource Accent}"/>
+            </Button>
+            <Button x:Name="GhostBtn" Width="36" Height="36" Click="Ghost_Click" ToolTip="Enter rooms invisible" Visibility="Collapsed">
+              <TextBlock x:Name="GhostIcon" FontFamily="Segoe MDL2 Assets" Text="&#xE7B3;" FontSize="16" Foreground="{DynamicResource Sub}"/>
+            </Button>
+            <Button x:Name="ThemeBtn" Width="36" Height="36" Click="Theme_Click" ToolTip="Light / dark mode">
+              <TextBlock x:Name="ThemeIcon" FontFamily="Segoe MDL2 Assets" Text="&#xE708;" FontSize="16" Foreground="{DynamicResource Sub}"/>
+            </Button>
+            <Button Width="36" Height="36" Click="Help_Click" ToolTip="Help">
+              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE897;" FontSize="16" Foreground="{DynamicResource Sub}"/>
+            </Button>
+            <Button Width="36" Height="36" Click="Settings_Click" ToolTip="My details">
+              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE77B;" FontSize="16" Foreground="{DynamicResource Sub}"/>
+            </Button>
+          </StackPanel>
+          <StackPanel Orientation="Horizontal">
+            <Grid Width="36" Height="36" Margin="0,0,10,0">
+              <Ellipse Fill="#27D06C"/>
+              <TextBlock x:Name="MeInitial" Text="8" Foreground="White" FontWeight="Bold"
+                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+            <StackPanel VerticalAlignment="Center">
+              <TextBlock x:Name="MeName" FontWeight="SemiBold" FontSize="15"/>
+              <ComboBox x:Name="StatusPick" Width="148" Height="24" FontSize="12" Margin="0,4,0,0"
+                        SelectionChanged="Status_Changed">
+                <ComboBoxItem Content="Online" Tag="online" IsSelected="True"/>
+                <ComboBoxItem Content="Away" Tag="away"/>
+                <ComboBoxItem Content="Occupied" Tag="occupied"/>
+                <ComboBoxItem Content="Do not disturb" Tag="dnd"/>
+                <ComboBoxItem Content="Invisible" Tag="invisible"/>
+              </ComboBox>
+              <TextBlock x:Name="MeStatus" Text="" Foreground="{DynamicResource Sub}" FontSize="11" Margin="0,2,0,0"/>
+            </StackPanel>
+          </StackPanel>
+        </DockPanel>
+      </Border>
+      <Border DockPanel.Dock="Top" Margin="12,0,12,8" Background="{DynamicResource Bg}" CornerRadius="10">
+        <TextBox x:Name="SearchBox" BorderThickness="0" Background="Transparent"
+                 TextChanged="Search_Changed" Padding="10,8"/>
+      </Border>
+      <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="12,8,12,12">
+        <Button Content="+ Contact" Click="AddFriend_Click" Background="{DynamicResource Bg}" Padding="12,8" Margin="0,0,8,0"/>
+        <Button Content="Chat rooms" Click="Rooms_Click" Background="{DynamicResource Accent}" Foreground="White" Padding="12,8" FontWeight="SemiBold"/>
+      </StackPanel>
+      <TextBlock DockPanel.Dock="Top" Margin="16,0,16,6" Foreground="{DynamicResource Sub}" FontSize="11"
+                 Text="CONTACTS"/>
+      <ListBox x:Name="People" BorderThickness="0" Background="Transparent"
+               SelectionChanged="People_Sel"
+               MouseRightButtonUp="People_Right"
+               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListBox.ItemContainerStyle>
+          <Style TargetType="ListBoxItem">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="8,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+              <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                  <Border x:Name="b" Background="Transparent" CornerRadius="12" Padding="10,8">
+                    <ContentPresenter/>
+                  </Border>
+                  <ControlTemplate.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                      <Setter TargetName="b" Property="Background" Value="{DynamicResource Select}"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                      <Setter TargetName="b" Property="Background" Value="{DynamicResource Hover}"/>
+                    </Trigger>
+                  </ControlTemplate.Triggers>
+                </ControlTemplate>
+              </Setter.Value>
+            </Setter>
+          </Style>
+        </ListBox.ItemContainerStyle>
+      </ListBox>
+    </DockPanel>
+
+    <!-- Conversation -->
+    <Border Grid.Column="1" Background="{DynamicResource Bg}" BorderBrush="{DynamicResource Line}" BorderThickness="1,0,0,0">
+      <DockPanel>
+        <Border DockPanel.Dock="Top" Background="{DynamicResource Card}" Padding="12,10" BorderBrush="{DynamicResource Line}" BorderThickness="0,0,0,1">
+          <DockPanel>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+              <Button Width="40" Height="40" Click="File_Click" ToolTip="Send file">
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8E5;" FontSize="16" Foreground="{DynamicResource Sub}"/>
+              </Button>
+              <Button Width="40" Height="40" Click="Nudge_Click" ToolTip="Nudge">
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE945;" FontSize="16" Foreground="{DynamicResource Sub}"/>
+              </Button>
+              <Button Width="40" Height="40" Click="Call_Click" ToolTip="Voice call">
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE717;" FontSize="16" Foreground="{DynamicResource Accent}"/>
+              </Button>
+              <Button Width="40" Height="40" Click="Video_Click" ToolTip="Video call">
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE714;" FontSize="16" Foreground="{DynamicResource Accent}"/>
+              </Button>
+            </StackPanel>
+            <StackPanel>
+              <TextBlock x:Name="ChatTitle" FontWeight="SemiBold" FontSize="15"/>
+              <TextBlock x:Name="ChatSub" Foreground="{DynamicResource Sub}" FontSize="12"/>
+            </StackPanel>
+          </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Bottom" Background="{DynamicResource Card}" Padding="10,8" BorderBrush="{DynamicResource Line}" BorderThickness="0,1,0,0">
+          <DockPanel>
+            <Button DockPanel.Dock="Left" Width="36" Height="36" Click="Emoji_Click" ToolTip="Emoji">
+              <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE76E;" FontSize="16"/>
+            </Button>
+            <Button DockPanel.Dock="Right" Width="44" Height="36" Click="Send_Click"
+                    Background="{DynamicResource Accent}" Foreground="White" FontWeight="SemiBold" Content="➤"/>
+            <TextBox x:Name="Composer" KeyDown="Composer_Key" BorderThickness="0" Background="Transparent"
+                     VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="False"/>
+          </DockPanel>
+        </Border>
+        <Popup x:Name="EmojiPop" Placement="Top" PlacementTarget="{Binding ElementName=Composer}" StaysOpen="False">
+          <Border Background="{DynamicResource Card}" BorderBrush="{DynamicResource Line}" BorderThickness="1" CornerRadius="12" Padding="8" Width="320">
+            <ScrollViewer MaxHeight="240" VerticalScrollBarVisibility="Auto">
+              <WrapPanel x:Name="EmojiWrap"/>
+            </ScrollViewer>
+          </Border>
+        </Popup>
+        <ScrollViewer x:Name="ChatScroll" Padding="14,10">
+          <StackPanel x:Name="Bubbles"/>
+        </ScrollViewer>
+      </DockPanel>
+    </Border>
+  </Grid>
+</Window>

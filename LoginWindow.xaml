@@ -1,0 +1,57 @@
+<Window x:Class="Area850.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="850 Messenger"
+        Icon="pack://application:,,,/Assets/850.ico"
+        Width="380" Height="560"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource Bg}"
+        FontFamily="{StaticResource Ui}">
+  <DockPanel Margin="28,22">
+    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,4">
+      <Button DockPanel.Dock="Right" Width="36" Height="36" Click="Theme_Click" ToolTip="Light / dark mode"
+              HorizontalAlignment="Right">
+        <TextBlock x:Name="ThemeIcon" FontFamily="Segoe MDL2 Assets" Text="&#xE708;" FontSize="16"
+                   Foreground="{DynamicResource Sub}"/>
+      </Button>
+      <CheckBox x:Name="DarkBox" Content="Dark mode" VerticalAlignment="Center"
+                Checked="Dark_Toggle" Unchecked="Dark_Toggle"/>
+    </DockPanel>
+    <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
+      <Grid Width="72" Height="72" Margin="0,8,0,10">
+        <Ellipse Fill="#27D06C"/>
+        <Ellipse Width="22" Height="22" Fill="#7CFF9A" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,8,0,0"/>
+        <Ellipse Width="18" Height="18" Fill="#1AA350" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,14,8,0"/>
+        <Ellipse Width="16" Height="16" Fill="#148A44" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="14,0,0,10"/>
+        <TextBlock Text="850" Foreground="White" FontWeight="Bold" FontSize="14"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      </Grid>
+      <TextBlock Text="850 Messenger" FontSize="22" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+      <TextBlock Text="Reinvented ICQ." Foreground="{DynamicResource Sub}" HorizontalAlignment="Center" Margin="0,4,0,16"/>
+    </StackPanel>
+    <Button DockPanel.Dock="Bottom" Content="Continue" Click="Go_Click"
+            Background="{DynamicResource Accent}" Foreground="White" FontWeight="SemiBold"
+            Padding="12,12" Margin="0,8,0,0"/>
+    <TextBlock x:Name="Err" DockPanel.Dock="Bottom" Foreground="#C42B1C" TextWrapping="Wrap" Margin="0,8,0,4" FontSize="12"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+      <StackPanel>
+        <UniformGrid Columns="2" Margin="0,0,0,10">
+          <Button x:Name="TabIn" Content="Sign in" Click="TabIn_Click" FontWeight="SemiBold" Padding="8"/>
+          <Button x:Name="TabUp" Content="Get a number" Click="TabUp_Click" Padding="8" Foreground="{DynamicResource Sub}"/>
+        </UniformGrid>
+        <TextBlock x:Name="IdLabel" Text="UIN" FontSize="11" Foreground="{DynamicResource Sub}" Margin="0,0,0,4"/>
+        <TextBox x:Name="UserBox"/>
+        <StackPanel x:Name="DisplayRow" Visibility="Collapsed">
+          <TextBlock Text="NICKNAME" FontSize="11" Foreground="{DynamicResource Sub}" Margin="0,12,0,4"/>
+          <TextBox x:Name="DisplayBox"/>
+        </StackPanel>
+        <TextBlock Text="PASSWORD" FontSize="11" Foreground="{DynamicResource Sub}" Margin="0,12,0,4"/>
+        <PasswordBox x:Name="PassBox"/>
+        <CheckBox x:Name="GhostBox" Margin="0,12,0,0" FontSize="12"
+                  Content="Invisible — others won't see you"/>
+        <Button Content="Help" Click="Help_Click" Margin="0,16,0,0" Foreground="{DynamicResource Sub}" FontSize="12"/>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

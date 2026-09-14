@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>850 Admin</title>
+  <style>
+    :root { --g:#27D06C; --gd:#1AA350; --bg:#0E1114; --card:#171B20; --ink:#E8ECF0; --sub:#8A9199; --line:#2A3038; --red:#C42B1C; --warn:#F0B020; }
+    * { box-sizing: border-box; }
+    body { margin:0; font: 14px/1.45 "Segoe UI", system-ui, sans-serif; background:var(--bg); color:var(--ink); }
+    a { color:var(--g); }
+    button { font: inherit; cursor:pointer; border:0; border-radius:10px; padding:8px 12px; background:#22272E; color:var(--ink); }
+    button.g { background:var(--g); color:#062; font-weight:600; }
+    button.r { background:var(--red); color:#fff; }
+    button.ghost { background:transparent; color:var(--sub); }
+    input, select { font: inherit; background:#0E1114; color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:8px 10px; width:100%; }
+    .login { max-width:340px; margin:12vh auto; background:var(--card); padding:28px; border-radius:16px; }
+    .login h1 { margin:0 0 6px; font-size:22px; }
+    .login p { color:var(--sub); margin:0 0 18px; }
+    .login label { display:block; font-size:11px; color:var(--sub); margin:12px 0 4px; letter-spacing:.06em; }
+    .err { color:#ff8a80; min-height:1.2em; margin:8px 0; font-size:13px; }
+    .app { display:grid; grid-template-columns: 200px 1fr; min-height:100vh; }
+    nav { background:var(--card); padding:18px 12px; border-right:1px solid var(--line); }
+    nav h2 { margin:0 12px 16px; font-size:16px; }
+    nav button { display:block; width:100%; text-align:left; margin:2px 0; }
+    nav button.on { background:#1C3A28; color:var(--g); }
+    .who { margin:18px 12px 0; color:var(--sub); font-size:12px; }
+    main { padding:22px 26px 40px; }
+    .cards { display:grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap:12px; margin-bottom:22px; }
+    .card { background:var(--card); border-radius:14px; padding:14px 16px; }
+    .card b { display:block; font-size:26px; color:var(--g); }
+    .card span { color:var(--sub); font-size:12px; }
+    table { width:100%; border-collapse:collapse; background:var(--card); border-radius:12px; overflow:hidden; }
+    th, td { text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+    th { color:var(--sub); font-size:11px; letter-spacing:.06em; font-weight:600; }
+    tr:last-child td { border-bottom:0; }
+    .row { display:flex; gap:8px; margin-bottom:12px; align-items:center; }
+    .row input { max-width:280px; }
+    .muted { color:var(--sub); }
+    .pill { display:inline-block; font-size:11px; padding:2px 8px; border-radius:99px; background:#222; color:var(--sub); }
+    .pill.on { background:#1C3A28; color:var(--g); }
+    .pill.hot { background:#3A1C1C; color:#ff8a80; }
+    .pill.lock { background:#3A321C; color:var(--warn); }
+    h3 { margin:22px 0 10px; font-size:15px; }
+    .hide { display:none !important; }
+    td button { padding:4px 8px; font-size:12px; margin:0 2px 2px 0; }
+    .log { font-family: ui-monospace, Consolas, monospace; font-size:12px; max-height:320px; overflow:auto; background:var(--card); border-radius:12px; padding:12px; }
+  </style>
+</head>
+<body>
+  <div id="login" class="login">
+    <h1>850 Admin</h1>
+    <p>Server console. UIN 0 only.</p>
+    <label>UIN</label>
+    <input id="uin" value="0" autocomplete="username"/>
+    <label>PASSWORD</label>
+    <input id="pass" type="password" autocomplete="current-password"/>
+    <div class="err" id="loginErr"></div>
+    <button class="g" style="width:100%;margin-top:8px" onclick="login()">Sign in</button>
+  </div>
+
+  <div id="app" class="app hide">
+    <nav>
+      <h2>850 Console</h2>
+      <button class="on" data-tab="over" onclick="tab('over')">Overview</button>
+      <button data-tab="users" onclick="tab('users')">Users</button>
+      <button data-tab="rooms" onclick="tab('rooms')">Rooms</button>
+      <button data-tab="traffic" onclick="tab('traffic')">Traffic</button>
+      <div class="who" id="who"></div>
+      <button class="ghost" style="margin-top:16px" onclick="logout()">Sign out</button>
+    </nav>
+    <main>
+      <section id="over">
+        <div class="cards" id="cards"></div>
+        <h3>Live sessions</h3>
+        <div id="sessions"></div>
+      </section>
+      <section id="users" class="hide">
+        <div class="row">
+          <input id="uq" placeholder="Search UIN or nickname" onkeydown="if(event.key==='Enter')loadUsers()"/>
+          <button class="g" onclick="loadUsers()">Search</button>
+        </div>
+        <div id="userTable"></div>
+      </section>
+      <section id="rooms" class="hide">
+        <div id="roomTable"></div>
+      </section>
+      <section id="traffic" class="hide">
+        <div class="row">
+          <input id="mq" placeholder="Filter by room slug (blank = all)"/>
+          <button class="g" onclick="loadMsgs()">Load</button>
+        </div>
+        <div class="log" id="msgs"></div>
+      </section>
+    </main>
+  </div>
+
+<script>
+const $ = id => document.getElementById(id);
+function tab(id) {
+  document.querySelectorAll('nav button[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === id));
+  ['over','users','rooms','traffic'].forEach(s => $(s).classList.toggle('hide', s !== id));
+  if (id === 'over') loadOver();
+  if (id === 'users') loadUsers();
+  if (id === 'rooms') loadRooms();
+  if (id === 'traffic') loadMsgs();
+}
+async function api(path, opt) {
+  const r = await fetch(path, Object.assign({ credentials: 'same-origin', headers: { 'Content-Type': 'application/json' } }, opt));
+  if (r.status === 401) { showLogin(); throw new Error('auth'); }
+  const t = await r.text();
+  let j = {};
+  try { j = t ? JSON.parse(t) : {}; } catch { j = { error: t }; }
+  if (!r.ok) throw new Error(j.error || t || r.status);
+  return j;
+}
+function showLogin() { $('login').classList.remove('hide'); $('app').classList.add('hide'); }
+function showApp() { $('login').classList.add('hide'); $('app').classList.remove('hide'); }
+async function login() {
+  $('loginErr').textContent = '';
+  try {
+    const j = await api('/api/admin/login', { method: 'POST', body: JSON.stringify({ username: $('uin').value, password: $('pass').value }) });
+    $('who').textContent = j.display + '  ·  #' + (j.username || '0');
+    showApp();
+    loadOver();
+  } catch (e) { if (e.message !== 'auth') $('loginErr').textContent = e.message; }
+}
+async function logout() { try { await api('/api/admin/logout', { method: 'POST', body: '{}' }); } catch {} showLogin(); }
+function card(n, l) { return `<div class="card"><b>${n}</b><span>${l}</span></div>`; }
+async function loadOver() {
+  const o = await api('/api/admin/overview');
+  const live = o.live || {};
+  $('who').textContent = o.me + '  ·  admin';
+  $('cards').innerHTML = [
+    card(o.users, 'users'),
+    card(live.online || 0, 'online'),
+    card(live.visible || 0, 'visible'),
+    card(live.ghosts || 0, 'ghosts'),
+    card(o.rooms, 'rooms'),
+    card(o.messages, 'messages'),
+    card(o.today, 'today'),
+    card(o.disabled, 'disabled')
+  ].join('');
+  const sess = live.sessions || [];
+  if (!sess.length) { $('sessions').innerHTML = '<p class="muted">Nobody signed in.</p>'; return; }
+  $('sessions').innerHTML = `<table><tr><th>UIN</th><th>Name</th><th>Status</th><th></th></tr>${sess.map(p =>
+    `<tr><td>#${esc(p.username)}</td><td>${esc(p.display)}</td><td><span class="pill ${p.invisible?'lock':'on'}">${p.invisible?'ghost':esc(p.status)}</span></td>
+     <td><button onclick="kick('${esc(p.username)}')">Kick</button></td></tr>`).join('')}</table>`;
+}
+async function loadUsers() {
+  const q = encodeURIComponent($('uq').value || '');
+  const list = await api('/api/admin/users?q=' + q);
+  $('userTable').innerHTML = `<table><tr><th>UIN</th><th>Nickname</th><th></th><th></th></tr>${list.map(u =>
+    `<tr>
+      <td>#${esc(u.uin)}</td>
+      <td>${esc(u.display)} ${u.isAdmin?'<span class="pill on">admin</span>':''} ${u.disabled?'<span class="pill hot">disabled</span>':''}<div class="muted">${esc((u.created||'').slice(0,10))}</div></td>
+      <td>
+        <button onclick="resetPw('${esc(u.username)}')">Password</button>
+        <button onclick="kick('${esc(u.username)}')">Kick</button>
+        <button onclick="dis('${esc(u.username)}', ${u.disabled? 'false':'true'})">${u.disabled?'Enable':'Disable'}</button>
+      </td>
+      <td>${u.uin==='0'?'':`<button class="r" onclick="delUser('${esc(u.username)}')">Delete</button>`}</td>
+    </tr>`).join('')}</table>`;
+}
+async function loadRooms() {
+  const list = await api('/api/admin/rooms');
+  $('roomTable').innerHTML = `<table><tr><th>Room</th><th>Channel</th><th>In</th><th>Msgs</th><th></th></tr>${list.map(r =>
+    `<tr>
+      <td><b>${esc(r.title)}</b> <span class="muted">/${esc(r.slug)}</span>
+        <div class="muted">${r.locked?'🔒 ':''}${r.doorLock?'door locked · ':''}${r.slow?'slow · ':''}owner #${esc(r.owner||'0')}</div>
+        <div class="muted">${esc(r.topic||'')}</div>
+        ${(r.people||[]).map(p => `<span class="pill ${p.mic?'hot':''}">${esc(p.display)}${p.mic?' ●':''}${p.cam?' cam':''}</span>`).join(' ')}
+      </td>
+      <td>${esc(r.channel)}</td>
+      <td>${r.users||0}</td>
+      <td>${r.messages||0}</td>
+      <td>
+        <button onclick="say('${esc(r.slug)}')">Announce</button>
+        <button onclick="lock('${esc(r.slug)}', ${r.doorLock? 'false':'true'})">${r.doorLock?'Unlock door':'Lock door'}</button>
+        <button onclick="clearPass('${esc(r.slug)}')">Clear password</button>
+        <button class="r" onclick="delRoom('${esc(r.slug)}')">Delete</button>
+      </td>
+    </tr>`).join('')}</table>`;
+}
+async function loadMsgs() {
+  const room = encodeURIComponent($('mq').value || '');
+  const list = await api('/api/admin/messages?take=100' + (room ? '&room=' + room : ''));
+  $('msgs').innerHTML = list.map(m => `<div><span class="muted">${esc(m.at||'').replace('T',' ').slice(0,19)} [${esc(m.room)}]</span> <b>${esc(m.display)}</b> ${esc(m.body)}</div>`).join('') || '<span class="muted">No traffic.</span>';
+}
+async function kick(u) { if (!confirm('Kick #' + u + '?')) return; await api('/api/admin/users/' + encodeURIComponent(u) + '/kick', { method:'POST', body:'{}' }); loadOver(); loadUsers(); }
+async function dis(u, on) { await api('/api/admin/users/' + encodeURIComponent(u) + '/disable', { method:'POST', body: JSON.stringify({ on }) }); loadUsers(); }
+async function resetPw(u) {
+  const p = prompt('New password for #' + u);
+  if (!p) return;
+  await api('/api/admin/users/' + encodeURIComponent(u) + '/password', { method:'POST', body: JSON.stringify({ password: p }) });
+  alert('Password set.');
+}
+async function delUser(u) { if (!confirm('Delete #' + u + ' forever?')) return; await api('/api/admin/users/' + encodeURIComponent(u), { method:'DELETE' }); loadUsers(); }
+async function lock(slug, on) { await api('/api/admin/rooms/' + encodeURIComponent(slug) + '/lock', { method:'POST', body: JSON.stringify({ on }) }); loadRooms(); }
+async function clearPass(slug) { if (!confirm('Clear password on ' + slug + '?')) return; await api('/api/admin/rooms/' + encodeURIComponent(slug) + '/clear-pass', { method:'POST', body:'{}' }); loadRooms(); }
+async function say(slug) {
+  const body = prompt('Announce to /' + slug);
+  if (!body) return;
+  await api('/api/admin/rooms/' + encodeURIComponent(slug) + '/say', { method:'POST', body: JSON.stringify({ body }) });
+}
+async function delRoom(slug) { if (!confirm('Delete room ' + slug + '?')) return; await api('/api/admin/rooms/' + encodeURIComponent(slug), { method:'DELETE' }); loadRooms(); }
+function esc(s) { return String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+$('pass').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+api('/api/admin/overview').then(o => { $('who').textContent = o.me + '  ·  admin'; showApp(); loadOver(); }).catch(() => showLogin());
+</script>
+</body>
+</html>

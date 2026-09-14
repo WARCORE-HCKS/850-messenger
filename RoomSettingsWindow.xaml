@@ -1,0 +1,28 @@
+<Window x:Class="Area850.RoomSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Room settings"
+        Icon="pack://application:,,,/Assets/850.ico"
+        Width="380" Height="440"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Bg}"
+        FontFamily="{StaticResource Ui}">
+  <DockPanel Margin="18">
+    <Button DockPanel.Dock="Bottom" Content="Save" Click="Save_Click"
+            Background="{DynamicResource Accent}" Foreground="White" FontWeight="SemiBold" Padding="10"/>
+    <ScrollViewer>
+      <StackPanel>
+        <TextBlock x:Name="Head" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,12"/>
+        <TextBlock Text="TOPIC" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <TextBox x:Name="TopicBox" Margin="0,4,0,10"/>
+        <TextBlock Text="WELCOME / STATUS" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <TextBox x:Name="WelcomeBox" Margin="0,4,0,10" Height="72" TextWrapping="Wrap" AcceptsReturn="True"/>
+        <TextBlock Text="NEW PASSWORD (blank = leave, space = clear)" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <PasswordBox x:Name="PassBox" Margin="0,4,0,10"/>
+        <CheckBox x:Name="LockBox" Content="Lock the door — mods only" Margin="0,0,0,8"/>
+        <CheckBox x:Name="SlowBox" Content="Slow mode — 8 seconds between messages"/>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

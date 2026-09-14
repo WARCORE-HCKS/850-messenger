@@ -1,0 +1,36 @@
+<Window x:Class="Area850.ProfileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="User details"
+        Icon="pack://application:,,,/Assets/850.ico"
+        Width="360" Height="520"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Bg}"
+        FontFamily="{StaticResource Ui}">
+  <DockPanel Margin="18">
+    <Button x:Name="SaveBtn" DockPanel.Dock="Bottom" Content="Save" Click="Save_Click"
+            Background="{DynamicResource Accent}" Foreground="White" FontWeight="SemiBold"
+            Padding="10" Margin="0,12,0,0" Visibility="Collapsed"/>
+    <ScrollViewer>
+      <StackPanel>
+        <TextBlock x:Name="TitleName" FontSize="18" FontWeight="SemiBold"/>
+        <TextBlock x:Name="UinLine" Foreground="{DynamicResource Sub}" Margin="0,2,0,12"/>
+        <TextBlock x:Name="StatusLine" Foreground="{DynamicResource Accent}" Margin="0,0,0,14"/>
+        <TextBlock Text="NICKNAME" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <TextBox x:Name="NickBox" Margin="0,4,0,10" IsReadOnly="True"/>
+        <TextBlock Text="STATUS MESSAGE" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <TextBox x:Name="MsgBox" Margin="0,4,0,10" IsReadOnly="True"/>
+        <TextBlock Text="ABOUT" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <TextBox x:Name="AboutBox" Margin="0,4,0,10" Height="72" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True"/>
+        <TextBlock Text="CITY" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <TextBox x:Name="CityBox" Margin="0,4,0,10" IsReadOnly="True"/>
+        <TextBlock Text="GENDER" FontSize="11" Foreground="{DynamicResource Sub}"/>
+        <TextBox x:Name="GenderBox" Margin="0,4,0,10" IsReadOnly="True"/>
+        <CheckBox x:Name="TopBox" Content="Always on top" Margin="0,4,0,8" Visibility="Collapsed"/>
+        <CheckBox x:Name="DarkBox" Content="Dark mode" Margin="0,0,0,0" Visibility="Collapsed"
+                  Checked="Dark_Toggle" Unchecked="Dark_Toggle"/>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

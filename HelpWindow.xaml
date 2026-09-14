@@ -1,0 +1,33 @@
+<Window x:Class="Area850.HelpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Help"
+        Icon="pack://application:,,,/Assets/850.ico"
+        Width="400" Height="520"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Bg}"
+        FontFamily="{StaticResource Ui}">
+  <ScrollViewer Padding="22">
+    <StackPanel>
+      <TextBlock Text="850 Messenger" FontSize="20" FontWeight="SemiBold"/>
+      <TextBlock Text="Classic ICQ, rebuilt. Native Windows messenger — not a website in a box."
+                 TextWrapping="Wrap" Margin="0,8,0,0" Foreground="{DynamicResource Ink}"/>
+      <TextBlock TextWrapping="Wrap" Margin="0,10,0,0" LineHeight="20"
+                 Text="Sign in with your UIN. Add people by number or nickname — they have to authorize you. Contacts stay on the list when they're offline. Statuses: Online, Away, Occupied, Do not disturb, Invisible. Auto-away after 5 minutes idle. Close the window to keep running in the tray. Offline messages wait until they sign in. Typing shows in 1:1 chat. Right-click a contact for details, file send, block, or delete. Nudge, voice, and video are in the conversation."/>
+      <TextBlock TextWrapping="Wrap" Margin="0,10,0,0" LineHeight="20"
+                 Text="Chat rooms live in channels (Hangout, Music, Tech, Gaming, Dating, After Dark, Area 850, War Room). Anyone can create a room and become owner — promote mods, password lock, set a welcome. Hold Ctrl to talk. Cam and mic lights show next to names. Dark mode is on the sign-in screen. Always on top is in My details."/>
+      <TextBlock Text="Run 850 Server first so people can sign in. Data is stored in a local SQLite file. Admin (UIN 0) has a native panel for users, rooms, and traffic."
+                 TextWrapping="Wrap" Margin="0,10,0,0" LineHeight="20"/>
+      <TextBlock Text="Credits" FontWeight="SemiBold" Margin="0,22,0,6"/>
+      <TextBlock Text="WARCORE" FontSize="16" FontWeight="SemiBold"/>
+      <TextBlock Margin="0,4,0,0">
+        <Hyperlink NavigateUri="https://area850.com" RequestNavigate="Site_Click">area850.com</Hyperlink>
+      </TextBlock>
+      <TextBlock Margin="0,8,0,0" Foreground="{DynamicResource Sub}" TextWrapping="Wrap">
+        <Run Text="Private source: "/>
+        <Hyperlink NavigateUri="https://github.com/WARCORE-HCKS/850-messenger" RequestNavigate="Site_Click">github.com/WARCORE-HCKS/850-messenger</Hyperlink>
+      </TextBlock>
+    </StackPanel>
+  </ScrollViewer>
+</Window>
